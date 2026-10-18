@@ -28,3 +28,24 @@ The initial media snapshot contains the exact 1,021 files from source commit
 `source-before-media-split-2026-10-17` preserves that complete source history,
 including all previous content edits. It is a recovery reference, not the
 media revision used by the website.
+
+== Originals and mosaic images
+
+`originals/` contains the best-resolution files recovered from the public source.
+Their names are their SHA-256 checksum; bytes and EXIF data are not altered.
+`originals/manifest.json` maps each logical site image to the selected source,
+dimensions and checksum. Existing full-size files already in `assets/` are reused.
+
+`assets/thumbnails/` contains static, uncropped WebP renditions for mosaics and
+album covers. Each is at most 960 pixels on its longest side and 128 KiB.
+The source repository's `scripts/upgrade-media.mjs` maintains both sets; run it
+with this repository as its media-checkout argument and commit its source
+manifest update together with the new `.media-revision` in the Typst repository.
+It caches public downloads under the system temporary directory so interrupted
+runs can resume. The temporary download cache may be removed before a later
+refresh to recheck changed source URLs.
+
+Originals are served on demand from a version-pinned GitHub Raw URL when a
+visitor opens the fullscreen viewer. They are deliberately outside `assets/`,
+so the website's partial media checkout and Pages bundle exclude them. This
+keeps Pages below its 1 GB published-site limit and does not enlarge Typst Sync.
