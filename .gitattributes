@@ -1,8 +1,2 @@
-# Preserve imported media bytes and keep binary documents out of text diffs.
-*.pdf binary
-*.mp4 binary
-*.jpg binary
-*.jpeg binary
-*.png binary
-*.gif binary
-*.webp binary
+# Camera originals are already compressed; avoid expensive binary delta searches.
+originals/** -delta
